@@ -448,30 +448,23 @@
   <div id="admin-content" style="display:none;">
 
     <div class="admin-section">
-      <div class="admin-section-title">💰 잔액 충전</div>
+      <div class="admin-section-title">💰 잔액 충전 / 차감</div>
+      <div style="font-size:12px;color:#888;margin-bottom:10px;">양수(예: 5000) → 충전 / 음수(예: -3000) → 차감</div>
       <div class="admin-row">
         <select class="admin-select" id="charge-name">
           <option value="전체">전체 인원</option>
         </select>
-        <input class="admin-input" type="number" id="charge-amount" placeholder="금액 (원)" style="max-width:120px;">
-        <button class="admin-btn success" onclick="chargeBalance()">충전</button>
+        <input class="admin-input" type="number" id="charge-amount" placeholder="금액 (+/-)" style="max-width:120px;">
+        <button class="admin-btn success" onclick="chargeBalance()">적용</button>
       </div>
     </div>
 
     <div class="admin-section">
-      <div class="admin-section-title">➖ 잔액 차감</div>
-      <div class="admin-row">
-        <select class="admin-select" id="deduct-name"></select>
-        <input class="admin-input" type="number" id="deduct-amount" placeholder="차감액 (원)" style="max-width:120px;">
-        <button class="admin-btn danger" onclick="deductBalance()">차감</button>
-      </div>
-    </div>
-
-    <div class="admin-section">
-      <div class="admin-section-title">✏️ 잔액 직접 수정</div>
+      <div class="admin-section-title">✏️ 잔액 직접 설정</div>
+      <div style="font-size:12px;color:#888;margin-bottom:10px;">입력한 금액으로 잔액을 직접 고정</div>
       <div class="admin-row">
         <select class="admin-select" id="set-name"></select>
-        <input class="admin-input" type="number" id="set-amount" placeholder="설정할 금액 (원)" style="max-width:130px;">
+        <input class="admin-input" type="number" id="set-amount" placeholder="설정할 금액" style="max-width:130px;">
         <button class="admin-btn" onclick="setBalance()">설정</button>
       </div>
     </div>
@@ -480,7 +473,7 @@
       <div class="admin-section-title">📦 재고 추가</div>
       <div class="admin-row">
         <select class="admin-select" id="stock-item-select"></select>
-        <input class="admin-input" type="number" id="stock-add-qty" placeholder="수량" style="max-width:80px;">
+        <input class="admin-input" type="number" id="stock-add-qty" placeholder="수량 (+/-)" style="max-width:80px;">
         <button class="admin-btn" onclick="addStockAdmin()">추가</button>
       </div>
       <div class="stock-list" id="stock-list">
@@ -851,7 +844,7 @@ function renderStockList() {
 async function chargeBalance() {
   const name = document.getElementById("charge-name").value;
   const amount = parseInt(document.getElementById("charge-amount").value);
-  if (!amount || amount <= 0) { showToast("금액을 입력해주세요"); return; }
+  if (!amount || amount === 0) { showToast("금액을 입력해주세요"); return; }
 
   try {
     const res = await fetch(SCRIPT_URL, {
@@ -860,7 +853,7 @@ async function chargeBalance() {
     });
     const data = await res.json();
     if (data.success) {
-      showToast(`✅ ${name === "전체" ? "전체 인원" : name} ${amount.toLocaleString()}원 충전 완료`);
+      showToast("✅ " + (name === "전체" ? "전체 인원" : name) + " " + Math.abs(amount).toLocaleString() + "원 " + (amount >= 0 ? "충전" : "차감") + " 완료");
       document.getElementById("charge-amount").value = "";
       await loadBalances();
     } else {
@@ -872,7 +865,7 @@ async function chargeBalance() {
 async function addStockAdmin() {
   const itemName = document.getElementById("stock-item-select").value;
   const qty = parseInt(document.getElementById("stock-add-qty").value);
-  if (!qty || qty <= 0) { showToast("수량을 입력해주세요"); return; }
+  if (!qty || qty === 0) { showToast("수량을 입력해주세요"); return; }
 
   try {
     const res = await fetch(SCRIPT_URL, {
@@ -881,7 +874,7 @@ async function addStockAdmin() {
     });
     const data = await res.json();
     if (data.success) {
-      showToast(`✅ ${itemName} +${qty}개 추가`);
+      showToast("✅ " + itemName + " " + (qty > 0 ? "+" : "") + qty + "개 변경");
       document.getElementById("stock-add-qty").value = "";
       await loadStocks();
     } else { showToast("❌ 실패"); }
