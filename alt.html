@@ -815,7 +815,7 @@ async function showMemberHistory(name) {
           <div style="padding:12px 0;border-bottom:1px solid #1a2a3a;">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
               <span style="font-size:11px;color:${dateColor};">${t.dateStr}</span>
-              <button onclick="cancelPurchase('${document.getElementById('modal-name').textContent}', ${t.timeKey}, ${totalAmt})"
+              <button onclick="cancelPurchase('${document.getElementById('modal-name').textContent}', '${t.purchaseId}', ${totalAmt})"
                 style="padding:4px 10px;background:#7a1a1a;color:#ffaaaa;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;">
                 취소
               </button>
@@ -834,12 +834,12 @@ async function showMemberHistory(name) {
   }
 }
 
-async function cancelPurchase(name, timeKey, totalAmt) {
+async function cancelPurchase(name, purchaseId, totalAmt) {
   if (!confirm(name + "의 " + totalAmt.toLocaleString() + "원 구매를 취소할까요?")) return;
   try {
     const res = await fetch(SCRIPT_URL, {
       method: "POST",
-      body: JSON.stringify({ action: "cancelPurchase", store: STORE_TYPE, name, timeKey })
+      body: JSON.stringify({ action: "cancelPurchase", store: STORE_TYPE, name, purchaseId })
     });
     const data = await res.json();
     if (data.success) {
