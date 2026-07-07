@@ -848,6 +848,7 @@ async function cancelPurchase(name, purchaseId, totalAmt) {
       await showMemberHistory(name);
     } else {
       showToast("❌ " + (data.message || "취소 실패"));
+      if (data.debug) alert("디버그:\n" + data.debug.join("\n"));
     }
   } catch(e) { showToast("❌ 오류 발생"); }
 }
