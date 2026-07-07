@@ -6,85 +6,84 @@
 <title>대대 휴게실</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; min-height: 100vh; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1923; min-height: 100vh; }
 
-  .header { background: #1a3a5c; color: white; padding: 16px 20px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
-  .header h1 { font-size: 18px; font-weight: 700; }
-  .header p { font-size: 12px; opacity: 0.7; margin-top: 2px; }
+  .header { background: linear-gradient(135deg, #0d1f35 0%, #1a3a6c 100%); color: white; padding: 16px 20px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.5); border-bottom: 2px solid #d4a017; }
+  .header h1 { font-size: 18px; font-weight: 800; color: #d4a017; letter-spacing: 1px; }
+  .header p { font-size: 12px; opacity: 0.6; margin-top: 2px; color: #ccc; }
 
-  .tab-bar { display: flex; background: white; border-bottom: 2px solid #e0e0e0; position: sticky; top: 57px; z-index: 99; overflow-x: auto; }
-  .tab { flex: 1; min-width: 70px; padding: 10px 4px; text-align: center; font-size: 11px; font-weight: 600; color: #888; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
-  .tab.active { color: #1a3a5c; border-bottom-color: #1a3a5c; }
+  .tab-bar { display: flex; background: #141e2b; border-bottom: 2px solid #d4a017; position: sticky; top: 57px; z-index: 99; overflow-x: auto; }
+  .tab { flex: 1; min-width: 70px; padding: 10px 4px; text-align: center; font-size: 11px; font-weight: 600; color: #666; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
+  .tab.active { color: #d4a017; border-bottom-color: #d4a017; }
 
   .page { display: none; padding: 16px; }
   .page.active { display: block; }
 
-  .section-title { font-size: 13px; font-weight: 700; color: #555; margin: 16px 0 8px; }
+  .section-title { font-size: 13px; font-weight: 700; color: #d4a017; margin: 16px 0 8px; }
 
-  .name-select { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 12px; font-size: 16px; background: white; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+  .name-select { width: 100%; padding: 14px; border: 2px solid #2a3a4a; border-radius: 12px; font-size: 16px; background: #1a2a3a; color: white; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23d4a017' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
 
   .category-tabs { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-  .cat-tab { padding: 8px 16px; border-radius: 20px; border: 2px solid #ddd; background: white; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; transition: all 0.2s; }
-  .cat-tab.active { background: #1a3a5c; border-color: #1a3a5c; color: white; }
+  .cat-tab { padding: 8px 16px; border-radius: 20px; border: 2px solid #2a3a4a; background: #1a2a3a; font-size: 13px; font-weight: 600; color: #888; cursor: pointer; transition: all 0.2s; }
+  .cat-tab.active { background: #d4a017; border-color: #d4a017; color: #111; }
 
   .item-grid { display: flex; flex-direction: column; gap: 8px; }
-  .item-card { background: white; border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border: 2px solid transparent; transition: all 0.2s; }
-  .item-card.selected { border-color: #1a3a5c; background: #f0f4f8; }
+  .item-card { background: #1a2a3a; border-radius: 12px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 4px rgba(0,0,0,0.3); border: 2px solid transparent; transition: all 0.2s; }
+  .item-card.selected { border-color: #d4a017; background: #1f3040; }
   .item-info { flex: 1; }
-  .item-name { font-size: 15px; font-weight: 600; color: #222; }
+  .item-name { font-size: 15px; font-weight: 600; color: #e8e8e8; }
   .item-price { font-size: 13px; color: #888; margin-top: 2px; }
-  .item-category-badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #e8f0fe; color: #1a3a5c; font-weight: 600; margin-top: 4px; display: inline-block; }
+  .item-category-badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #1a3a2a; color: #4a9; font-weight: 600; margin-top: 4px; display: inline-block; }
 
   .qty-control { display: flex; align-items: center; gap: 8px; }
-  .qty-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: #1a3a5c; color: white; font-size: 18px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; }
-  .qty-btn.minus { background: #ccc; }
-  .qty-num { font-size: 16px; font-weight: 700; min-width: 20px; text-align: center; }
+  .qty-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: #d4a017; color: #111; font-size: 18px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; }
+  .qty-btn.minus { background: #2a3a4a; color: #888; }
+  .qty-num { font-size: 16px; font-weight: 700; min-width: 20px; text-align: center; color: #e8e8e8; }
 
-  .cart-section { background: white; border-radius: 16px; padding: 16px; margin-top: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-  .cart-title { font-size: 15px; font-weight: 700; color: #222; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-  .cart-badge { background: #e74c3c; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-  .cart-empty { color: #aaa; font-size: 14px; text-align: center; padding: 12px 0; }
-  .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+  .cart-section { background: #1a2a3a; border-radius: 16px; padding: 16px; margin-top: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); border: 1px solid #2a3a4a; }
+  .cart-title { font-size: 15px; font-weight: 700; color: #e8e8e8; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .cart-badge { background: #c0392b; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .cart-empty { color: #555; font-size: 14px; text-align: center; padding: 12px 0; }
+  .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #1f2f3f; font-size: 14px; }
   .cart-item:last-child { border-bottom: none; }
-  .cart-item-name { color: #333; font-weight: 500; }
+  .cart-item-name { color: #ccc; font-weight: 500; }
   .cart-item-right { display: flex; align-items: center; gap: 10px; }
-  .cart-item-amount { color: #1a3a5c; font-weight: 700; }
-  .cart-remove { color: #e74c3c; font-size: 16px; cursor: pointer; padding: 2px 6px; border: none; background: none; font-weight: 700; }
-  .cart-total { display: flex; justify-content: space-between; padding-top: 12px; margin-top: 4px; border-top: 2px solid #1a3a5c; font-weight: 700; font-size: 16px; }
+  .cart-item-amount { color: #d4a017; font-weight: 700; }
+  .cart-remove { color: #c0392b; font-size: 16px; cursor: pointer; padding: 2px 6px; border: none; background: none; font-weight: 700; }
+  .cart-total { display: flex; justify-content: space-between; padding-top: 12px; margin-top: 4px; border-top: 2px solid #d4a017; font-weight: 700; font-size: 16px; color: #e8e8e8; }
 
-  .submit-btn { width: 100%; padding: 16px; background: #1a3a5c; color: white; border: none; border-radius: 14px; font-size: 16px; font-weight: 700; margin-top: 16px; cursor: pointer; transition: opacity 0.2s; }
-  .submit-btn:disabled { opacity: 0.4; }
+  .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #b8860b, #d4a017); color: #111; border: none; border-radius: 14px; font-size: 16px; font-weight: 800; margin-top: 16px; cursor: pointer; transition: opacity 0.2s; letter-spacing: 0.5px; }
+  .submit-btn:disabled { opacity: 0.3; }
   .submit-btn:active { opacity: 0.8; }
 
-  .balance-search { width: 100%; padding: 12px 16px; border: 2px solid #ddd; border-radius: 12px; font-size: 15px; margin-bottom: 12px; }
+  .balance-search { width: 100%; padding: 12px 16px; border: 2px solid #2a3a4a; border-radius: 12px; font-size: 15px; margin-bottom: 12px; background: #1a2a3a; color: white; }
   .balance-list { display: flex; flex-direction: column; gap: 8px; }
-  .balance-card { background: white; border-radius: 12px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-  .balance-name { font-size: 15px; font-weight: 600; color: #222; }
-  .balance-amount { font-size: 16px; font-weight: 700; }
-  .balance-amount.positive { color: #1a3a5c; }
+  .balance-card { background: #1a2a3a; border-radius: 12px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 4px rgba(0,0,0,0.3); border: 1px solid #2a3a4a; }
+  .balance-name { font-size: 15px; font-weight: 600; color: #e8e8e8; }
+  .balance-amount { font-size: 16px; font-weight: 700; color: #d4a017; }
 
-  .admin-section { background: white; border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-  .admin-section-title { font-size: 15px; font-weight: 700; color: #1a3a5c; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #f0f4f8; }
+  .admin-section { background: #1a2a3a; border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.3); border: 1px solid #2a3a4a; }
+  .admin-section-title { font-size: 15px; font-weight: 700; color: #d4a017; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #2a3a4a; }
   .admin-row { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
-  .admin-input { flex: 1; padding: 11px 14px; border: 2px solid #ddd; border-radius: 10px; font-size: 14px; }
-  .admin-select { flex: 1; padding: 11px 14px; border: 2px solid #ddd; border-radius: 10px; font-size: 14px; background: white; }
-  .admin-btn { padding: 11px 18px; background: #1a3a5c; color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; }
-  .admin-btn.danger { background: #e74c3c; }
-  .admin-btn.success { background: #27ae60; }
-  .admin-hint { font-size: 12px; color: #888; margin-bottom: 10px; }
+  .admin-input { flex: 1; padding: 11px 14px; border: 2px solid #2a3a4a; border-radius: 10px; font-size: 14px; background: #0f1923; color: white; }
+  .admin-select { flex: 1; padding: 11px 14px; border: 2px solid #2a3a4a; border-radius: 10px; font-size: 14px; background: #0f1923; color: white; }
+  .admin-btn { padding: 11px 18px; background: #1a3a6c; color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+  .admin-btn.danger { background: #7a1a1a; color: #ffaaaa; }
+  .admin-btn.success { background: #1a5a2a; color: #aaffaa; }
+  .admin-hint { font-size: 12px; color: #666; margin-bottom: 10px; }
 
   .stock-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
-  .stock-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #f8f9fa; border-radius: 10px; font-size: 14px; }
-  .stock-item-name { font-weight: 600; color: #333; }
-  .stock-count { font-weight: 700; color: #1a3a5c; }
-  .stock-count.low { color: #e74c3c; }
+  .stock-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #0f1923; border-radius: 10px; font-size: 14px; border: 1px solid #2a3a4a; }
+  .stock-item-name { font-weight: 600; color: #ccc; }
+  .stock-count { font-weight: 700; color: #d4a017; }
+  .stock-count.low { color: #c0392b; }
 
   .lock-screen { text-align: center; padding: 40px 20px; }
-  .lock-screen input { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 12px; font-size: 16px; text-align: center; letter-spacing: 4px; margin-bottom: 12px; }
+  .lock-screen input { width: 100%; padding: 14px; border: 2px solid #2a3a4a; border-radius: 12px; font-size: 16px; text-align: center; letter-spacing: 4px; margin-bottom: 12px; background: #1a2a3a; color: white; }
 
-  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #222; color: white; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 600; z-index: 9999; opacity: 0; transition: opacity 0.3s; white-space: nowrap; }
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #d4a017; color: #111; padding: 12px 24px; border-radius: 24px; font-size: 14px; font-weight: 700; z-index: 9999; opacity: 0; transition: opacity 0.3s; white-space: nowrap; }
   .toast.show { opacity: 1; }
-  .loading { text-align: center; padding: 40px; color: #aaa; font-size: 14px; }
+  .loading { text-align: center; padding: 40px; color: #555; font-size: 14px; }
 </style>
 </head>
 <body>
@@ -242,6 +241,23 @@
     </div>
 
     <div class="admin-section">
+      <div class="admin-section-title">👤 인원 추가</div>
+      <div class="admin-row">
+        <input class="admin-input" type="text" id="new-member-name" placeholder="추가할 이름">
+        <button class="admin-btn success" onclick="addMember()">추가</button>
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <div class="admin-section-title">🗑️ 인원 삭제</div>
+      <div class="admin-hint">삭제하면 해당 인원의 사용 기록도 사라져요</div>
+      <div class="admin-row">
+        <select class="admin-select" id="remove-member-name"></select>
+        <button class="admin-btn danger" onclick="removeMember()">삭제</button>
+      </div>
+    </div>
+
+    <div class="admin-section">
       <div class="admin-section-title">🚫 품목 활성/비활성 전환</div>
       <div class="admin-row">
         <select class="admin-select" id="toggle-item-select"></select>
@@ -325,6 +341,7 @@ function filterCategory(cat, el) {
 function renderItems() {
   const grid = document.getElementById("item-grid");
   const filtered = allItems.filter(i => i.active === "Y" && (currentCategory === "전체" || i.category === currentCategory));
+  filtered.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
   if (!filtered.length) { grid.innerHTML = '<div class="loading">품목이 없어요</div>'; return; }
   grid.innerHTML = filtered.map(item => {
     const inCart = cart.find(c => c.name === item.name);
@@ -510,6 +527,16 @@ function renderAdminSelects() {
     resetSelect.appendChild(opt);
   });
 
+  const removeSelect = document.getElementById("remove-member-name");
+  if (removeSelect) {
+    removeSelect.innerHTML = "";
+    allMembers.forEach(name => {
+      const opt = document.createElement("option");
+      opt.value = name; opt.textContent = name;
+      removeSelect.appendChild(opt);
+    });
+  }
+
   ["set-name"].forEach(id => {
     const sel = document.getElementById(id);
     if (!sel) return;
@@ -547,6 +574,33 @@ function renderStockList() {
       </div>
       <div class="stock-count ${Number(s.stock) <= Number(s.minAlert) ? 'low' : ''}">${s.stock}개</div>
     </div>`).join("");
+}
+
+async function addMember() {
+  const name = document.getElementById("new-member-name").value.trim();
+  if (!name) { showToast("이름을 입력해주세요"); return; }
+  try {
+    const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "addMember", store: STORE_TYPE, name }) });
+    const data = await res.json();
+    if (data.success) {
+      showToast("✅ " + name + " 추가 완료");
+      document.getElementById("new-member-name").value = "";
+      await loadBalances();
+    } else { showToast("❌ " + (data.message || "실패")); }
+  } catch(e) { showToast("❌ 오류 발생"); }
+}
+
+async function removeMember() {
+  const name = document.getElementById("remove-member-name").value;
+  if (!confirm(name + "을 삭제할까요?")) return;
+  try {
+    const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "removeMember", store: STORE_TYPE, name }) });
+    const data = await res.json();
+    if (data.success) {
+      showToast("✅ " + name + " 삭제 완료");
+      await loadBalances();
+    } else { showToast("❌ " + (data.message || "실패")); }
+  } catch(e) { showToast("❌ 오류 발생"); }
 }
 
 async function adjustUsage() {
