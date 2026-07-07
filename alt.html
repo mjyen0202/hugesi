@@ -271,7 +271,7 @@
 
 <!-- 구매내역 모달 -->
 <div id="history-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;overflow-y:auto;">
-  <div style="background:#1a2a3a;margin:40px 16px;border-radius:20px;overflow:hidden;border:1px solid #2a3a4a;">
+  <div style="background:#1a2a3a;margin:40px 16px 20px;border-radius:20px;overflow:hidden;border:1px solid #2a3a4a;">
     <div style="background:linear-gradient(135deg,#0d1f35,#1a3a6c);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #d4a017;">
       <div>
         <div id="modal-name" style="font-size:18px;font-weight:800;color:#d4a017;"></div>
@@ -279,7 +279,13 @@
       </div>
       <button onclick="closeHistoryModal()" style="background:none;border:none;color:#888;font-size:24px;cursor:pointer;">✕</button>
     </div>
-    <div id="modal-content" style="padding:16px;"></div>
+    <!-- 탭 -->
+    <div style="display:flex;background:#0f1923;border-bottom:2px solid #2a3a4a;">
+      <div id="modal-tab-summary" onclick="switchModalTab('summary')" style="flex:1;padding:12px;text-align:center;font-size:13px;font-weight:700;color:#d4a017;border-bottom:3px solid #d4a017;cursor:pointer;">📊 품목별</div>
+      <div id="modal-tab-timeline" onclick="switchModalTab('timeline')" style="flex:1;padding:12px;text-align:center;font-size:13px;font-weight:700;color:#555;border-bottom:3px solid transparent;cursor:pointer;">📅 구매이력</div>
+    </div>
+    <div id="modal-content-summary" style="padding:16px;"></div>
+    <div id="modal-content-timeline" style="padding:16px;display:none;"></div>
   </div>
 </div>
 
@@ -747,10 +753,25 @@ function switchTab(tab, el) {
   document.getElementById("page-" + tab).classList.add("active");
 }
 
+let currentModalTab = 'summary';
+let modalData = null;
+
+function switchModalTab(tab) {
+  currentModalTab = tab;
+  document.getElementById("modal-tab-summary").style.color = tab === 'summary' ? '#d4a017' : '#555';
+  document.getElementById("modal-tab-summary").style.borderBottomColor = tab === 'summary' ? '#d4a017' : 'transparent';
+  document.getElementById("modal-tab-timeline").style.color = tab === 'timeline' ? '#d4a017' : '#555';
+  document.getElementById("modal-tab-timeline").style.borderBottomColor = tab === 'timeline' ? '#d4a017' : 'transparent';
+  document.getElementById("modal-content-summary").style.display = tab === 'summary' ? 'block' : 'none';
+  document.getElementById("modal-content-timeline").style.display = tab === 'timeline' ? 'block' : 'none';
+}
+
 async function showMemberHistory(name) {
   document.getElementById("modal-name").textContent = name;
-  document.getElementById("modal-content").innerHTML = '<div style="text-align:center;padding:30px;color:#555;">불러오는 중...</div>';
+  document.getElementById("modal-content-summary").innerHTML = '<div style="text-align:center;padding:30px;color:#555;">불러오는 중...</div>';
+  document.getElementById("modal-content-timeline").innerHTML = '';
   document.getElementById("history-modal").style.display = "block";
+  switchModalTab('summary');
 
   try {
     const res = await fetch(SCRIPT_URL, {
@@ -758,29 +779,53 @@ async function showMemberHistory(name) {
       body: JSON.stringify({ action: "getMemberHistory", store: STORE_TYPE, name })
     });
     const data = await res.json();
-    const history = data.history || [];
+    const summary = data.summary || [];
+    const timeline = data.timeline || [];
 
-    if (!history.length) {
-      document.getElementById("modal-content").innerHTML = '<div style="text-align:center;padding:30px;color:#555;">구매 내역이 없어요</div>';
-      return;
+    // 품목별 탭
+    if (!summary.length) {
+      document.getElementById("modal-content-summary").innerHTML = '<div style="text-align:center;padding:30px;color:#555;">구매 내역이 없어요</div>';
+    } else {
+      const total = summary.reduce((s, h) => s + h.amount, 0);
+      document.getElementById("modal-content-summary").innerHTML = `
+        <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #2a3a4a;display:flex;justify-content:space-between;font-size:13px;color:#888;">
+          <span>총 ${summary.length}종류</span>
+          <span style="color:#d4a017;font-weight:700;">${total.toLocaleString()}원</span>
+        </div>
+        ${summary.map(h => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #1a2a3a;">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#e8e8e8;">${h.name}</div>
+              <div style="font-size:12px;color:#666;">총 ${h.qty}개</div>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:#d4a017;">${h.amount.toLocaleString()}원</div>
+          </div>`).join("")}`;
     }
 
-    const total = history.reduce((s, h) => s + h.amount, 0);
-    document.getElementById("modal-content").innerHTML = `
-      <div style="margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #2a3a4a;display:flex;justify-content:space-between;font-size:13px;color:#888;">
-        <span>총 ${history.length}종류</span>
-        <span style="color:#d4a017;font-weight:700;">${total.toLocaleString()}원</span>
-      </div>
-      ${history.map(h => `
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #1a2a3a;">
-          <div>
-            <div style="font-size:14px;font-weight:600;color:#e8e8e8;">${h.name}</div>
-            <div style="font-size:12px;color:#666;">${h.qty}개</div>
-          </div>
-          <div style="font-size:14px;font-weight:700;color:#d4a017;">${h.amount.toLocaleString()}원</div>
-        </div>`).join("")}`;
+    // 구매이력 탭
+    if (!timeline.length) {
+      document.getElementById("modal-content-timeline").innerHTML = '<div style="text-align:center;padding:30px;color:#555;">구매 내역이 없어요</div>';
+    } else {
+      document.getElementById("modal-content-timeline").innerHTML = timeline.map((t, idx) => {
+        const isLatest = idx === 0;
+        const color = isLatest ? '#27ae60' : '#e8e8e8';
+        const dateColor = isLatest ? '#27ae60' : '#555';
+        return `
+          <div style="padding:12px 0;border-bottom:1px solid #1a2a3a;">
+            ${t.items.map(item => `
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <div>
+                  <span style="font-size:14px;font-weight:600;color:${color};">${item.name}</span>
+                  <span style="font-size:11px;color:${dateColor};margin-left:6px;">${t.dateStr}</span>
+                </div>
+                <div style="font-size:13px;font-weight:700;color:${color};">${item.qty}개 · ${item.amount.toLocaleString()}원</div>
+              </div>`).join("")}
+          </div>`;
+      }).join("");
+    }
+
   } catch(e) {
-    document.getElementById("modal-content").innerHTML = '<div style="text-align:center;padding:30px;color:#c0392b;">❌ 불러오기 실패</div>';
+    document.getElementById("modal-content-summary").innerHTML = '<div style="text-align:center;padding:30px;color:#c0392b;">❌ 불러오기 실패</div>';
   }
 }
 
