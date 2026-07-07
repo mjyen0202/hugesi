@@ -6,7 +6,7 @@
 <title>휴게실</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; height: 100vh; display: flex; flex-direction: column; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; height: 100vh; display: flex; flex-direction: column; background: #111; }
 
   .select-btn {
     flex: 1;
@@ -17,38 +17,58 @@
     cursor: pointer;
     transition: opacity 0.2s;
     text-decoration: none;
+    position: relative;
+    overflow: hidden;
   }
   .select-btn:active { opacity: 0.85; }
 
   .btn-alt {
-    background: #1a3a5c;
+    background: linear-gradient(135deg, #1a2a4a 0%, #1a3a6c 100%);
     color: white;
+    border-bottom: 2px solid #d4a017;
   }
   .btn-daedae {
-    background: #2c6e49;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a1a1a 100%);
     color: white;
+    border-top: 2px solid #c0392b;
   }
 
   .btn-title {
-    font-size: 36px;
-    font-weight: 800;
-    letter-spacing: 2px;
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: 3px;
     margin-bottom: 8px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
   }
+  .btn-alt .btn-title { color: #d4a017; }
+  .btn-daedae .btn-title { color: #e8e8e8; }
+
   .btn-sub {
-    font-size: 15px;
+    font-size: 14px;
     opacity: 0.7;
+    letter-spacing: 1px;
   }
 
+  .badge {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    opacity: 0.06;
+  }
+  .btn-alt .badge { background: #d4a017; right: 20px; }
+  .btn-daedae .badge { background: #c0392b; left: 20px; }
+
   .divider {
-    height: 3px;
-    background: rgba(255,255,255,0.3);
+    height: 2px;
+    background: linear-gradient(to right, #c0392b, #d4a017, #c0392b);
   }
 </style>
 </head>
 <body>
 
 <a class="select-btn btn-alt" href="alt.html">
+  <div class="badge"></div>
   <div class="btn-title">ALT</div>
   <div class="btn-sub">알라트 휴게실</div>
 </a>
@@ -56,6 +76,7 @@
 <div class="divider"></div>
 
 <a class="select-btn btn-daedae" href="daedae.html">
+  <div class="badge"></div>
   <div class="btn-title">대대휴게실</div>
   <div class="btn-sub">대대 휴게실</div>
 </a>
